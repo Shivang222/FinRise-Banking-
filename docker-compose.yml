@@ -1,0 +1,62 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Mysql21
+      MYSQL_DATABASE: mysql_banking
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+  accounts:
+    image: "accounts:v1"
+    container_name: accounts-ms
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - mynetwork
+  loans:
+    image: "loans:v1"
+    container_name: loans-ms
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - mynetwork
+  cards:
+    image: "cards:v1"
+    container_name: cards-ms
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8002:8002"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: "bridge"

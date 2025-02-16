@@ -1,11 +1,26 @@
+#server:
+#  port: 8001
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/mysql_banking?currentSchema=microbanking
+#
+#    username: root
+#    password: Mysql21
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+
+# Docker configuration
 server:
   port: 8001
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mysql_banking?currentSchema=microbanking
+    url: jdbc:mysql://mysql-container:3306/mysql_banking
 
     username: root
     password: Mysql21
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
